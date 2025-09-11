@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Career - College Search</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #f8f9fc;
+            --accent-color: #36b9cc;
+        }
+        
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        
+        .page-container {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .page-active {
+            display: block;
+            opacity: 1;
+        }
+        
+        
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+        }
+        
+        
+        .hero-section {
+            background: linear-gradient(rgba(78, 115, 223, 0.8), rgba(78, 115, 223, 0.8)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            margin-bottom: 3rem;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        
+        .search-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top: -50px;
+            position: relative;
+            z-index: 100;
+        }
+        
+        .college-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+            height: 100%;
+            border: none;
+        }
+        
+        .college-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .career-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .career-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a59c7;
+            border-color: #3a59c7;
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        
+        .footer {
+            background-color: #4e73df;
+            color: white;
+            padding: 3rem 0;
+            margin-top: 3rem;
+        }
+        
+        
+        .loader {
+            display: none;
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid var(--primary-color);
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        
+        .rating {
+            color: #f39c12;
+            font-weight: bold;
+        }
+        
+        
+        .back-button {
+            margin-bottom: 20px;
+        }
+        
+        
+        .college-logo {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 3rem 0;
+            }
+            
+            .search-card {
+                margin-top: -30px;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#" onclick="showPage('home-page')">
+                <i class="fas fa-graduation-cap me-2"></i>
+                <strong>Choose Career</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" onclick="showPage('home-page')">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('careers-page')">Careers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('about-page')">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('contact-page')">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home-page" class="page-container page-active">
+        <!-- Hero Section -->
+        <section class="hero-section text-center">
+            <div class="container">
+                <h1 class="display-4 fw-bold mb-4">Find Your Perfect College & Career Path</h1>
+                <p class="lead mb-4">Empowering the next generation of Indian students with innovative, affordable, and inclusive educational technology</p>
+                <button class="btn btn-light btn-lg px-4" onclick="scrollToSearch()">Start Your Search</button>
+            </div>
+        </section>
+
+        <!-- Search Section -->
+        <div class="container">
+            <div class="search-card" id="search-section">
+                <h3 class="mb-4">Find Colleges That Match Your Aspirations</h3>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="input-group mb-3">
+                            <input type="text" id="search-input" class="form-control form-control-lg" placeholder="Search by college name, course, or location...">
+                            <button class="btn btn-primary" type="button" id="search-button">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-outline-primary w-100 h-100" data-bs-toggle="collapse" data-bs-target="#filters">
+                            <i class="fas fa-filter"></i> Advanced Filters
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="collapse mt-3" id="filters">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="location-filter" class="form-label">Location</label>
+                            <input type="text" id="location-filter" class="form-control" placeholder="Any location">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="course-filter" class="form-label">Course</label>
+                            <input type="text" id="course-filter" class="form-control" placeholder="Any course">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="career-filter" class="form-label">Career Path</label>
+                            <input type="text" id="career-filter" class="form-control" placeholder="Any career">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="fee-range" class="form-label">Max Fee: ₹<span id="fee-value">5000000</span></label>
+                            <input type="range" class="form-range" id="fee-range" min="0" max="5000000" step="100000" value="5000000">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            <label for="rating-filter" class="form-label">Min Rating: <span id="rating-value">0</span></label>
+                            <input type="range" class="form-range" id="rating-filter" min="0" max="10" step="0.1" value="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <h3 class="mb-4">Search Results</h3>
+                    <div class="loader" id="loader"></div>
+                    <div id="results-container" class="row">
+                        <!-- Results will be displayed here -->
+                    </div>
+                    <div id="no-results" class="alert alert-info" style="display: none;">
+                        No colleges found matching your criteria. Try adjusting your filters.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Career Paths Section -->
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <h3 class="mb-4">Explore Career Paths</h3>
+                    <p class="mb-4">Discover which careers align with your interests and find colleges that can help you achieve your goals</p>
+                    
+                    <div class="row" id="career-cards-container">
+                        <!-- Career cards will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Careers Page -->
+    <div id="careers-page" class="page-container">
+        <div class="container mt-4">
+            <button class="btn btn-outline-primary back-button" onclick="showPage('home-page')">
+                <i class="fas fa-arrow-left me-2"></i> Back to Home
+            </button>
+            
+            <div class="hero-section text-center">
+                <div class="container">
+                    <h1 class="display-5 fw-bold mb-3">Career Paths</h1>
+                    <p class="lead mb-0">Explore various career options and find the right path for you</p>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="row" id="careers-container">
+                        <!-- Careers will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Career Detail Page -->
+    <div id="career-detail-page" class="page-container">
+        <div class="container mt-4">
+            <button class="btn btn-outline-primary back-button" onclick="showPage('careers-page')">
+                <i class="fas fa-arrow-left me-2"></i> Back to Careers
+            </button>
+            
+            <div class="hero-section text-center">
+                <div class="container">
+                    <h1 class="display-5 fw-bold mb-3" id="career-title">Career Details</h1>
+                    <p class="lead mb-0" id="career-description">Career information and related colleges</p>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <h3 class="mb-4">Colleges for this Career</h3>
+                    <div id="career-colleges-container" class="row">
+                        <!-- Colleges for this career will be displayed here -->
+                    </div>
+                    <div id="no-career-colleges" class="alert alert-info" style="display: none;">
+                        No colleges found for this career path.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about-page" class="page-container">
+        <div class="container mt-4">
+            <button class="btn btn-outline-primary back-button" onclick="showPage('home-page')">
+                <i class="fas fa-arrow-left me-2"></i> Back to Home
+            </button>
+            
+            <div class="hero-section text-center">
+                <div class="container">
+                    <h1 class="display-5 fw-bold mb-3">About Choose Career</h1>
+                    <p class="lead mb-0">Innovative, affordable, and inclusive technologies for India's unique challenges</p>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="p-5 bg-light rounded-3">
+                        <p class="lead text-center">
+                            Choose Career is a movement to build innovative, affordable, and inclusive technologies 
+                            tailored for India's unique educational challenges. By focusing on scalability and accessibility, 
+                            we empower the next billion users with solutions that bridge digital gaps, drive growth, 
+                            and ensure no one is left behind.
+                        </p>
+                        <div class="row mt-5">
+                            <div class="col-md-4 text-center">
+                                <i class="fas fa-rupee-sign fa-3x text-primary mb-3"></i>
+                                <h5>Affordable</h5>
+                                <p>Our platform is completely free to use, ensuring access for all students.</p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <i class="fas fa-mobile-alt fa-3x text-primary mb-3"></i>
+                                <h5>Accessible</h5>
+                                <p>Optimized for low-bandwidth connections and mobile devices.</p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
+                                <h5>Inclusive</h5>
+                                <p>Designed specifically for India's diverse educational landscape.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact-page" class="page-container">
+        <div class="container mt-4">
+            <button class="btn btn-outline-primary back-button" onclick="showPage('home-page')">
+                <i class="fas fa-arrow-left me-2"></i> Back to Home
+            </button>
+            
+            <div class="hero-section text-center">
+                <div class="container">
+                    <h1 class="display-5 fw-bold mb-3">Contact Us</h1>
+                    <p class="lead mb-0">Get in touch with our team</p>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Get in Touch</h5>
+                                    <form>
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Name</label>
+                                            <input type="text" class="form-control" id="name">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="email">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="message" class="form-label">Message</label>
+                                            <textarea class="form-control" id="message" rows="3"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Information</h5>
+                                    <p><i class="fas fa-map-marker-alt me-2"></i> Bengaluru, India</p>
+                                    <p><i class="fas fa-envelope me-2"></i> info@choosecareer.in</p>
+                                    <p><i class="fas fa-phone me-2"></i> +91 9876543210</p>
+                                    <hr>
+                                    <h6>Follow Us</h6>
+                                    <div class="d-flex gap-3">
+                                        <a href="#" class="text-primary"><i class="fab fa-facebook fa-2x"></i></a>
+                                        <a href="#" class="text-primary"><i class="fab fa-twitter fa-2x"></i></a>
+                                        <a href="#" class="text-primary"><i class="fab fa-instagram fa-2x"></i></a>
+                                        <a href="#" class="text-primary"><i class="fab fa-linkedin fa-2x"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Choose Career</h5>
+                    <p>Empowering the next generation of Indian students with innovative educational technology.</p>
+                </div>
+                <div class="col-md-2">
+                    <h5>Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white" onclick="showPage('home-page')">Home</a></li>
+                        <li><a href="#" class="text-white" onclick="showPage('careers-page')">Careers</a></li>
+                        <li><a href="#" class="text-white" onclick="showPage('about-page')">About</a></li>
+                        <li><a href="#" class="text-white" onclick="showPage('contact-page')">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Bengaluru, India</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@choosecareer.in</li>
+                        <li><i class="fas fa-phone me-2"></i> +91 9876543210</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Newsletter</h5>
+                    <p>Subscribe to our newsletter for updates.</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Your email">
+                        <button class="btn btn-light" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-4 bg-light">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p>© 2023 Choose Career. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // College data
+        const colleges = [
+            {
+                id: 1,
+                name: "IIT Bombay",
+                location: "Mumbai",
+                courses: ["Engineering"],
+                type: "Public",
+                fees: "200000",
+                rating: "9.8",
+                career_paths: ["Engineering"],
+                admission_process: "Entrance Exam",
+                website: "https://www.iitb.ac.in"
+            },
+            {
+                id: 2,
+                name: "St. Stephen's College",
+                location: "Delhi",
+                courses: ["Arts", "Science"],
+                type: "Public",
+                fees: "150000",
+                rating: "9.5",
+                career_paths: ["Research", "Civil Services"],
+                admission_process: "Merit-based",
+                website: "https://www.ststephens.edu"
+            },
+            {
+                id: 3,
+                name: "IIM Ahmedabad",
+                location: "Ahmedabad",
+                courses: ["Management"],
+                type: "Public",
+                fees: "2500000",
+                rating: "9.9",
+                career_paths: ["Management", "Entrepreneurship"],
+                admission_process: "CAT",
+                website: "https://www.iima.ac.in"
+            },
+            {
+                id: 4,
+                name: "Christ University",
+                location: "Bangalore",
+                courses: ["Arts", "Science", "Management"],
+                type: "Private",
+                fees: "300000",
+                rating: "9.2",
+                career_paths: ["Corporate", "Research"],
+                admission_process: "Entrance Exam",
+                website: "https://christuniversity.in"
+            },
+            {
+                id: 5,
+                name: "Jadavpur University",
+                location: "Kolkata",
+                courses: ["Engineering", "Arts"],
+                type: "Public",
+                fees: "100000",
+                rating: "9.0",
+                career_paths: ["Engineering", "Research"],
+                admission_process: "Entrance Exam",
+                website: "https://www.jaduniv.edu.in"
+            },
+            {
+                id: 6,
+                name: "Lady Shri Ram College",
+                location: "Delhi",
+                courses: ["Arts", "Commerce"],
+                type: "Public",
+                fees: "80000",
+                rating: "9.3",
+                career_paths: ["Corporate", "Civil Services"],
+                admission_process: "Merit-based",
+                website: "https://lsr.edu.in"
+            },
+            {
+                id: 7,
+                name: "BITS Pilani",
+                location: "Pilani",
+                courses: ["Engineering", "Science"],
+                type: "Private",
+                fees: "400000",
+                rating: "9.6",
+                career_paths: ["Engineering", "Research"],
+                admission_process: "Entrance Exam",
+                website: "https://www.bits-pilani.ac.in"
+            },
+            {
+                id: 8,
+                name: "SRCC",
+                location: "Delhi",
+                courses: ["Commerce"],
+                type: "Public",
+                fees: "120000",
+                rating: "9.7",
+                career_paths: ["Finance", "Corporate"],
+                admission_process: "Merit-based",
+                website: "https://www.srcc.edu"
+            },
+            {
+                id: 9,
+                name: "AIIMS Delhi",
+                location: "Delhi",
+                courses: ["Medical"],
+                type: "Public",
+                fees: "50000",
+                rating: "9.9",
+                career_paths: ["Medical", "Research"],
+                admission_process: "Entrance Exam",
+                website: "https://www.aiims.edu"
+            },
+            {
+                id: 10,
+                name: "NIFT Delhi",
+                location: "Delhi",
+                courses: ["Design"],
+                type: "Public",
+                fees: "300000",
+                rating: "8.8",
+                career_paths: ["Fashion", "Design"],
+                admission_process: "Entrance Exam",
+                website: "https://www.nift.ac.in"
+            }
+        ];
+
+        // Career data
+        const careers = [
+            {id: 1, name: "Engineering", description: "Design and build systems, structures, and materials"},
+            {id: 2, name: "Medical", description: "Healthcare professions including doctors, nurses, and specialists"},
+            {id: 3, name: "Management", description: "Business leadership and administration roles"},
+            {id: 4, name: "Research", description: "Scientific investigation and discovery"},
+            {id: 5, name: "Design", description: "Creative fields including fashion, graphic, and industrial design"},
+            {id: 6, name: "Civil Services", description: "Government and public administration roles"},
+            {id: 7, name: "Finance", description: "Banking, accounting, and financial services"},
+            {id: 8, name: "Entrepreneurship", description: "Starting and running your own business"},
+            {id: 9, name: "Corporate", description: "Professional roles in business organizations"},
+            {id: 10, name: "Fashion", description: "Design, production, and marketing of clothing and accessories"}
+        ];
+
+        // Page navigation functions
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-container').forEach(page => {
+                page.classList.remove('page-active');
+            });
+            
+            // Show the requested page
+            document.getElementById(pageId).classList.add('page-active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+            
+            // If showing home page, initialize content
+            if (pageId === 'home-page') {
+                initializeHomePage();
+            } else if (pageId === 'careers-page') {
+                initializeCareersPage();
+            }
+        }
+        
+        function scrollToSearch() {
+            document.getElementById('search-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function showCareerDetail(careerId) {
+            const career = careers.find(c => c.id === careerId);
+            if (!career) return;
+            
+            // Update career detail page
+            document.getElementById('career-title').textContent = career.name;
+            document.getElementById('career-description').textContent = career.description;
+            
+            // Find colleges for this career
+            const relatedColleges = colleges.filter(c => c.career_paths.includes(career.name));
+            
+            const container = document.getElementById('career-colleges-container');
+            container.innerHTML = '';
+            
+            if (relatedColleges.length === 0) {
+                document.getElementById('no-career-colleges').style.display = 'block';
+            } else {
+                document.getElementById('no-career-colleges').style.display = 'none';
+                
+                relatedColleges.forEach(college => {
+                    const collegeCard = document.createElement('div');
+                    collegeCard.className = 'col-md-6 col-lg-4 mb-4';
+                    collegeCard.innerHTML = `
+                        <div class="college-card">
+                            <div class="card-body">
+                                <h5 class="card-title">${college.name}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">${college.location}</h6>
+                                <p class="card-text">
+                                    <strong>Courses:</strong> ${college.courses.join(', ')}<br>
+                                    <strong>Type:</strong> ${college.type}<br>
+                                    <strong>Fees:</strong> ₹${college.fees}<br>
+                                    <span class="rating">Rating: ${college.rating}/10</span>
+                                </p>
+                                <a href="${college.website}" target="_blank" class="btn btn-sm btn-primary">Visit Website</a>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(collegeCard);
+                });
+            }
+            
+            // Show career detail page
+            showPage('career-detail-page');
+        }
+        
+        // Initialize home page content
+        function initializeHomePage() {
+            // Initialize career cards
+            const careerCardsContainer = document.getElementById('career-cards-container');
+            careerCardsContainer.innerHTML = '';
+            
+            careers.forEach(career => {
+                const careerCard = document.createElement('div');
+                careerCard.className = 'col-md-4 mb-4';
+                careerCard.innerHTML = `
+                    <div class="career-card" onclick="showCareerDetail(${career.id})">
+                        <h5>${career.name}</h5>
+                        <p class="text-muted">${career.description}</p>
+                        <div class="text-end">
+                            <span class="badge bg-primary">Explore</span>
+                        </div>
+                    </div>
+                `;
+                careerCardsContainer.appendChild(careerCard);
+            });
+            
+            // Perform initial search to show all colleges
+            performSearch();
+        }
+        
+        // Initialize careers page
+        function initializeCareersPage() {
+            const careersContainer = document.getElementById('careers-container');
+            careersContainer.innerHTML = '';
+            
+            careers.forEach(career => {
+                const careerCard = document.createElement('div');
+                careerCard.className = 'col-md-6 col-lg-4 mb-4';
+                careerCard.innerHTML = `
+                    <div class="career-card" onclick="showCareerDetail(${career.id})">
+                        <h5>${career.name}</h5>
+                        <p class="text-muted">${career.description}</p>
+                        <div class="text-end">
+                            <span class="badge bg-primary">View Colleges</span>
+                        </div>
+                    </div>
+                `;
+                careersContainer.appendChild(careerCard);
+            });
+        }
+        
+        // Search functionality
+        function performSearch() {
+            const loader = document.getElementById('loader');
+            const resultsContainer = document.getElementById('results-container');
+            const noResults = document.getElementById('no-results');
+            
+            loader.style.display = 'block';
+            resultsContainer.innerHTML = '';
+            noResults.style.display = 'none';
+            
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const location = document.getElementById('location-filter').value.toLowerCase();
+            const course = document.getElementById('course-filter').value.toLowerCase();
+            const career = document.getElementById('career-filter').value.toLowerCase();
+            const maxFee = parseInt(document.getElementById('fee-range').value);
+            const minRating = parseFloat(document.getElementById('rating-filter').value);
+            
+            // Simulate network delay
+            setTimeout(() => {
+                const results = colleges.filter(college => {
+                    // Convert fees to integer for comparison
+                    const collegeFee = parseInt(college.fees);
+                    
+                    // Check if college matches query
+                    const matchesQuery = !query || 
+                        college.name.toLowerCase().includes(query) || 
+                        college.courses.some(c => c.toLowerCase().includes(query)) ||
+                        college.location.toLowerCase().includes(query);
+                    
+                    // Check if college matches location filter
+                    const matchesLocation = !location || college.location.toLowerCase().includes(location);
+                    
+                    // Check if college matches course filter
+                    const matchesCourse = !course || college.courses.some(c => c.toLowerCase().includes(course));
+                    
+                    // Check if college matches career filter
+                    const matchesCareer = !career || college.career_paths.some(c => c.toLowerCase().includes(career));
+                    
+                    // Check if college matches fee filter
+                    const matchesFee = collegeFee <= maxFee;
+                    
+                    // Check if college matches rating filter
+                    const matchesRating = parseFloat(college.rating) >= minRating;
+                    
+                    return matchesQuery && matchesLocation && matchesCourse && matchesCareer && matchesFee && matchesRating;
+                });
+                
+                loader.style.display = 'none';
+                
+                if (results.length === 0) {
+                    noResults.style.display = 'block';
+                    return;
+                }
+                
+                results.forEach(college => {
+                    const collegeCard = document.createElement('div');
+                    collegeCard.className = 'col-md-6 col-lg-4 mb-4';
+                    collegeCard.innerHTML = `
+                        <div class="college-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="college-logo">${college.name.charAt(0)}</div>
+                                    <div>
+                                        <h5 class="card-title mb-0">${college.name}</h5>
+                                        <p class="card-text text-muted mb-0">${college.location}</p>
+                                    </div>
+                                </div>
+                                <p class="card-text">
+                                    <strong>Courses:</strong> ${college.courses.join(', ')}<br>
+                                    <strong>Type:</strong> ${college.type}<br>
+                                    <strong>Fees:</strong> ₹${college.fees}<br>
+                                    <span class="rating">Rating: ${college.rating}/10</span>
+                                </p>
+                                <p>
+                                    <strong>Career Paths:</strong> ${college.career_paths.join(', ')}
+                                </p>
+                                <a href="${college.website}" target="_blank" class="btn btn-sm btn-primary">Visit Website</a>
+                            </div>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(collegeCard);
+                });
+            }, 500);
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners
+            document.getElementById('search-button').addEventListener('click', performSearch);
+            document.getElementById('search-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Fee range slider
+            const feeRange = document.getElementById('fee-range');
+            const feeValue = document.getElementById('fee-value');
+            feeRange.addEventListener('input', function() {
+                feeValue.textContent = this.value.toLocaleString();
+                performSearch();
+            });
+            
+            // Rating filter slider
+            const ratingFilter = document.getElementById('rating-filter');
+            const ratingValue = document.getElementById('rating-value');
+            ratingFilter.addEventListener('input', function() {
+                ratingValue.textContent = this.value;
+                performSearch();
+            });
+            
+            // Filter inputs
+            document.getElementById('location-filter').addEventListener('input', performSearch);
+            document.getElementById('course-filter').addEventListener('input', performSearch);
+            document.getElementById('career-filter').addEventListener('input', performSearch);
+            
+            // Initialize home page
+            initializeHomePage();
+        });
+    </script>
+</body>
+</html>
